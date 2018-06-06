@@ -1,7 +1,8 @@
+'use strict';
+
 const connectToDatabase = require('./db');
 const Note = require('./models/Note');
-
-'use strict';
+require('dotenv').config({ path: './variables.env' });
 
 module.exports.create = (event, context, callback) => {
   context.callbackWaitsForEmptyEventLoop = false;
@@ -62,7 +63,7 @@ module.exports.update = (event, context, callback) => {
 
   connectToDatabase()
     .then(() => {
-      Node.findByIdAndUpdate(event.pathParameters.id, JSON.parse(event.body), { new: true })
+      Note.findByIdAndUpdate(event.pathParameters.id, JSON.parse(event.body), { new: true })
         .then(note => callback(null, {
           statusCode: 200,
           body: JSON.stringify(note)
@@ -80,10 +81,10 @@ module.exports.delete = (event, context, callback) => {
 
   connectToDatabase()
     .then(() => {
-      Node.findByIdAndRemove(event.pathParameters.id)
-        .then(node => callback(null, {
+      Note.findByIdAndRemove(event.pathParameters.id)
+        .then(note => callback(null, {
           statusCode: 200,
-          body: JSON.stringify({ message: 'Removed note with id: ' + note._id, node: note })
+          body: JSON.stringify({ message: 'Removed note with id: ' + note._id, note: note })
         }))
         .catch(err => callback(null, {
           statusCode: err.statusCode || 500,
