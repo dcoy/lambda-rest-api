@@ -1,3 +1,6 @@
+const connectToDatabase = require('./db');
+const Note = require('./models/Note');
+
 'use strict';
 
 module.exports.create = (event, context, callback) => {
